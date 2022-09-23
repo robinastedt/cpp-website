@@ -5,7 +5,7 @@
 
 namespace cppwebsite::dom
 {
-    Tag::Tag(std::string name, Properties properties, std::vector<ptr> children, ChildPolicy childPolicy)
+    Tag::Tag(std::string name, Properties properties, DocumentObjects children, ChildPolicy childPolicy)
     : m_name(std::move(name))
     , m_properties(std::move(properties))
     , m_children(std::move(children))
@@ -45,7 +45,7 @@ namespace cppwebsite::dom
     }
 
     void
-    Tag::addChildren(std::vector<ptr> children) {
+    Tag::addChildren(DocumentObjects children) {
         if (m_children.empty()) {
             m_children = std::move(children);
         } else {
@@ -56,18 +56,18 @@ namespace cppwebsite::dom
     }
 
     Tag::ptr
-    Tag::createHtml(std::vector<ptr> children) {
+    Tag::createHtml(DocumentObjects children) {
         return std::make_unique<Tag>("html", Properties{}, std::move(children), ChildPolicy::NewLine);
     }
 
     Tag::ptr
-    Tag::createHeader(std::vector<ptr> children) {
+    Tag::createHeader(DocumentObjects children) {
         return std::make_unique<Tag>("header", Properties{}, std::move(children), ChildPolicy::NewLine);
     }
 
     Tag::ptr
     Tag::createTitle(std::string content) {
-        std::vector<ptr> children;
+        DocumentObjects children;
         children.emplace_back(std::make_unique<Text>("title"));
         return std::make_unique<Tag>("title", Properties{}, std::move(children), ChildPolicy::Inline);
     }
@@ -82,18 +82,18 @@ namespace cppwebsite::dom
     }
 
     Tag::ptr
-    Tag::createBody(std::vector<ptr> children) {
+    Tag::createBody(DocumentObjects children) {
         return std::make_unique<Tag>("body", Properties{}, std::move(children), ChildPolicy::NewLine);
     }
 
     Tag::ptr Tag::createDiv(std::string id, ptr child, ChildPolicy childPolicy) {
-        std::vector<ptr> children;
+        DocumentObjects children;
         children.emplace_back(std::move(child));
         return createDiv(std::move(id), std::move(children), childPolicy);
     }
 
     Tag::ptr
-    Tag::createDiv(std::string id, std::vector<ptr> children, ChildPolicy childPolicy) {
+    Tag::createDiv(std::string id, DocumentObjects children, ChildPolicy childPolicy) {
         Properties properties {
             {"id", std::move(id)}
         };
@@ -101,7 +101,7 @@ namespace cppwebsite::dom
     }
 
     Tag::ptr Tag::createDiv(std::string id, std::string text) {
-        std::vector<ptr> children;
+        DocumentObjects children;
         children.emplace_back(std::make_unique<Text>(std::move(text)));
         return createDiv(std::move(id), std::move(children), ChildPolicy::Inline);
     }
@@ -109,10 +109,10 @@ namespace cppwebsite::dom
     namespace
     {
         std::string
-        linkPolicyProperty(Tag::LinkPolicy policy) {
+        linkPolicyProperty(LinkPolicy policy) {
             switch (policy) {
-                case Tag::LinkPolicy::Self: return "_self";
-                case Tag::LinkPolicy::NewTab: return "_blank";
+                case LinkPolicy::Self: return "_self";
+                case LinkPolicy::NewTab: return "_blank";
             }
             throw std::runtime_error("Unhandled enum value: " + std::to_string((int)policy));
         }
@@ -120,7 +120,7 @@ namespace cppwebsite::dom
     
 
     Tag::ptr
-    Tag::createLink(std::string path, std::vector<ptr> children, ChildPolicy childPolicy, LinkPolicy linkPolicy) {
+    Tag::createLink(std::string path, DocumentObjects children, ChildPolicy childPolicy, LinkPolicy linkPolicy) {
         Properties properties {
             {"target", linkPolicyProperty(linkPolicy)},
             {"href", std::move(path)}
@@ -130,7 +130,7 @@ namespace cppwebsite::dom
 
     Tag::ptr
     Tag::createLink(std::string path, std::string text, LinkPolicy linkPolicy) {
-        std::vector<ptr> children;
+        DocumentObjects children;
         children.emplace_back(std::make_unique<Text>(std::move(text)));
         return createLink(std::move(path), std::move(children), ChildPolicy::Inline, linkPolicy);
     }

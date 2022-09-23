@@ -30,10 +30,10 @@ namespace cppwebsite::pages
             auto contactLink = dom::Tag::createLink(
                 "mailto:robin.astedt@gmail.com",
                 std::move(contactLinkChildren),
-                dom::Tag::ChildPolicy::Inline,
-                dom::Tag::LinkPolicy::NewTab
+                dom::ChildPolicy::Inline,
+                dom::LinkPolicy::NewTab
             );
-            auto titleBox = dom::Tag::createDiv("titleBox", std::move(contactLink), dom::Tag::ChildPolicy::NewLine);
+            auto titleBox = dom::Tag::createDiv("titleBox", std::move(contactLink), dom::ChildPolicy::NewLine);
 
             // Link box
             auto musicLink = dom::Tag::createLink("music", "Music");
@@ -46,16 +46,16 @@ namespace cppwebsite::pages
             linkBoxChildren.emplace_back(std::move(projectsLink));
             linkBoxChildren.emplace_back(std::make_unique<dom::Text>(linkBoxDelimiter));
             linkBoxChildren.emplace_back(std::move(textLink));
-            auto linkBox = dom::Tag::createDiv("linkBox", std::move(linkBoxChildren), dom::Tag::ChildPolicy::Inline);
+            auto linkBox = dom::Tag::createDiv("linkBox", std::move(linkBoxChildren), dom::ChildPolicy::Inline);
 
             // Main box
             std::vector<dom::DocumentObject::ptr> mainBoxChildren;
             mainBoxChildren.emplace_back(std::move(titleBox));
             mainBoxChildren.emplace_back(std::move(linkBox));
-            auto mainBox = dom::Tag::createDiv("mainBox", std::move(mainBoxChildren), dom::Tag::ChildPolicy::NewLine);
+            auto mainBox = dom::Tag::createDiv("mainBox", std::move(mainBoxChildren), dom::ChildPolicy::NewLine);
 
             // Whole page box
-            auto wholePageBox = dom::Tag::createDiv("wholepageBox", std::move(mainBox), dom::Tag::ChildPolicy::NewLine);
+            auto wholePageBox = dom::Tag::createDiv("wholepageBox", std::move(mainBox), dom::ChildPolicy::NewLine);
 
             std::vector<dom::DocumentObject::ptr> children;
             children.emplace_back(std::move(wholePageBox));

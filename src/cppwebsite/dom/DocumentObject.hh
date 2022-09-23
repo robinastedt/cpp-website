@@ -2,6 +2,7 @@
 
 #include <string>
 #include <memory>
+#include <vector>
 
 namespace cppwebsite::dom
 {
@@ -16,4 +17,6 @@ namespace cppwebsite::dom
 
         virtual void append(std::string& document) const = 0;
     };
+
+    using DocumentObjects = std::vector<DocumentObject::ptr>;
 } // namespace cppwebsite::dom
