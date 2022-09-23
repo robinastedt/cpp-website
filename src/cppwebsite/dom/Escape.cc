@@ -20,10 +20,15 @@ namespace cppwebsite::dom
         }
 
         bool
-        isAsciiAlphaNumeric(char32_t code) {
-            return (code >= 'a' && code <= 'z') ||
-                    (code >= 'A' && code <= 'Z') ||
-                    (code >= '0' && code <= '9');
+        isSafeForHtml(char32_t code) {
+            switch (code) {
+                case '"':
+                case '&':
+                case '\'':
+                case '<':
+                case '>': return false;
+            }
+            return code >= ' ' && code <= '~';
         }
 
     } // namespace
@@ -40,7 +45,7 @@ namespace cppwebsite::dom
 
         for (UniIter it = begin; it != end; ++it) {
             const char32_t code = *it;
-            if (isAsciiAlphaNumeric(code)) {
+            if (isSafeForHtml(code)) {
                 continue;
             }
             std::u32string_view previous(begin, it);
