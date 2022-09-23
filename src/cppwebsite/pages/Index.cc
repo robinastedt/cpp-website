@@ -23,8 +23,42 @@ namespace cppwebsite::pages
         }
 
         auto createBody() {
+            // Title box
+            std::vector<dom::DocumentObject::ptr> contactLinkChildren;
+            contactLinkChildren.emplace_back(dom::Tag::createDiv("title1", "Robin Åstedt"));
+            contactLinkChildren.emplace_back(dom::Tag::createDiv("title2", "Contact"));
+            auto contactLink = dom::Tag::createLink(
+                "mailto:robin.astedt@gmail.com",
+                std::move(contactLinkChildren),
+                dom::Tag::ChildPolicy::Inline,
+                dom::Tag::LinkPolicy::NewTab
+            );
+            auto titleBox = dom::Tag::createDiv("titleBox", std::move(contactLink), dom::Tag::ChildPolicy::NewLine);
+
+            // Link box
+            auto musicLink = dom::Tag::createLink("music", "Music");
+            auto projectsLink = dom::Tag::createLink("projects", "Projects");
+            auto textLink = dom::Tag::createLink("text", "Text");
+            std::string linkBoxDelimiter = " | ";
+            std::vector<dom::DocumentObject::ptr> linkBoxChildren;
+            linkBoxChildren.emplace_back(std::move(musicLink));
+            linkBoxChildren.emplace_back(std::make_unique<dom::Text>(linkBoxDelimiter));
+            linkBoxChildren.emplace_back(std::move(projectsLink));
+            linkBoxChildren.emplace_back(std::make_unique<dom::Text>(linkBoxDelimiter));
+            linkBoxChildren.emplace_back(std::move(textLink));
+            auto linkBox = dom::Tag::createDiv("linkBox", std::move(linkBoxChildren), dom::Tag::ChildPolicy::Inline);
+
+            // Main box
+            std::vector<dom::DocumentObject::ptr> mainBoxChildren;
+            mainBoxChildren.emplace_back(std::move(titleBox));
+            mainBoxChildren.emplace_back(std::move(linkBox));
+            auto mainBox = dom::Tag::createDiv("mainBox", std::move(mainBoxChildren), dom::Tag::ChildPolicy::NewLine);
+
+            // Whole page box
+            auto wholePageBox = dom::Tag::createDiv("wholepageBox", std::move(mainBox), dom::Tag::ChildPolicy::NewLine);
+
             std::vector<dom::DocumentObject::ptr> children;
-            children.emplace_back(std::make_unique<dom::Text>("Hello world!"));
+            children.emplace_back(std::move(wholePageBox));
             return dom::Tag::createBody(std::move(children));
         }
 
