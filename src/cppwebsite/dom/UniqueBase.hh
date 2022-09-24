@@ -12,9 +12,6 @@ namespace cppwebsite::dom
     class UniqueBase {
         size_t m_index;
 
-        static std::map<std::string, size_t> _indices;
-        static std::vector<std::string> _names;
-
     public:
         UniqueBase(std::string name);
 
