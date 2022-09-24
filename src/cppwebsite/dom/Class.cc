@@ -1,4 +1,4 @@
-#include "Id.hh"
+#include "Class.hh"
 
 #include <cppwebsite/dom/Property.hh>
 #include <map>
@@ -6,13 +6,13 @@
 
 namespace cppwebsite::dom
 {
-    Id::Id(std::string name)
-    : UniqueBase<Id>(std::move(name))
+    Class::Class(std::string name)
+    : UniqueBase<Class>(std::move(name))
     {}
 
     const std::string&
-    Id::getPropertyName() const {
-        static std::string name = "id";
+    Class::getPropertyName() const {
+        static std::string name = "class";
         return name;
     }
 
@@ -20,4 +20,4 @@ namespace cppwebsite::dom
 
 
 #include "cppwebsite/dom/UniqueBase.template.cc"
-template class cppwebsite::dom::UniqueBase<cppwebsite::dom::Id>;
+template class cppwebsite::dom::UniqueBase<cppwebsite::dom::Class>;
