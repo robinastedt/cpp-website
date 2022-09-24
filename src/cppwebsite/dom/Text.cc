@@ -1,7 +1,8 @@
 #include "Text.hh"
 
 #include <cppwebsite/dom/Escape.hh>
-#include <cppwebsite/dom/Document.hh>
+
+#include <cppwebsite/common/Document.hh>
 
 namespace cppwebsite::dom
 {

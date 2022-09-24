@@ -3,9 +3,10 @@
 #include <cppwebsite/dom/DocumentObject.hh>
 #include <cppwebsite/dom/ChildPolicy.hh>
 #include <cppwebsite/dom/LinkPolicy.hh>
-#include <cppwebsite/common/Property.hh>
 #include <cppwebsite/dom/Id.hh>
 #include <cppwebsite/dom/Class.hh>
+
+#include <cppwebsite/common/Property.hh>
 
 #include <string>
 #include <vector>

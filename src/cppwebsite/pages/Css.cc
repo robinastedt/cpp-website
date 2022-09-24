@@ -1,6 +1,6 @@
 #include "Css.hh"
 
-#include <cppwebsite/dom/Document.hh>
+#include <cppwebsite/common/Document.hh>
 #include <cppwebsite/css/StyleSheet.hh>
 
 #include <httplib.h>
@@ -22,9 +22,7 @@ namespace cppwebsite::pages
 
     void
     Css::computeContent() {
-        dom::Document document;
-        m_styleSheet.append(document);
-        m_content = document.getContent();
+        m_content = Document::createPageContent(m_styleSheet);
     }
 
     css::StyleSheet&

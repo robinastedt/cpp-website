@@ -6,11 +6,12 @@
 #include <cppwebsite/dom/Class.hh>
 #include <cppwebsite/css/TagState.hh>
 
+#include <string>
 
-namespace cppwebsite::dom
+namespace cppwebsite
 {
     class Document;
-} // namespace cppwebsite::dom
+} // namespace cppwebsite
 
 
 namespace cppwebsite::css
@@ -26,6 +27,6 @@ namespace cppwebsite::css
     public:
         Style(Properties properties, const dom::Tag* tag, TagState state, dom::Id id, dom::Class clazz);
 
-        void append(dom::Document& document) const;
+        void append(Document& document) const;
     };
 } // namespace cppwebsite::css

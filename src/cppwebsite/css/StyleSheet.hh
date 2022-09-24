@@ -53,6 +53,6 @@ namespace cppwebsite::css
             const dom::Class& clazz,
             TagState state = TagState::Default);
 
-        void append(dom::Document& document) const;
+        void append(Document& document) const;
     };
 } // namespace cppwebsite::css

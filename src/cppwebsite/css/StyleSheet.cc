@@ -24,7 +24,7 @@ namespace cppwebsite::css
     }
 
     void
-    StyleSheet::append(dom::Document& document) const {
+    StyleSheet::append(Document& document) const {
         for (const Style& style : m_styles) {
             style.append(document);
         }

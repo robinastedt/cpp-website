@@ -4,13 +4,12 @@
 
 #include <cassert>
 
-namespace cppwebsite::dom
+namespace cppwebsite
 {
     Document::Document()
     : m_indentation(0)
     , m_content()
     {}
-
 
     Document::IndentScope::IndentScope(Document& document)
     : m_document(document)
@@ -22,7 +21,6 @@ namespace cppwebsite::dom
         assert(m_document.m_indentation > 0);
         m_document.m_indentation -= 1;
     }
-
 
     Document::IndentScope
     Document::indent() {
@@ -46,11 +44,4 @@ namespace cppwebsite::dom
         return m_content;
     }
 
-    std::string
-    Document::createPageContentFromDom(const DocumentObject& dom) {
-        Document document;
-        dom.append(document);
-        return document.m_content;
-    }
-
-} // namespace cppwebsite::dom
+} // namespace cppwebsite

@@ -2,14 +2,11 @@
 
 #include <string>
 
-namespace cppwebsite::dom
+namespace cppwebsite
 {
-    class DocumentObject;
-
     class Document {
         size_t m_indentation;
         std::string m_content;
-
 
     public:
         Document();
@@ -28,6 +25,11 @@ namespace cppwebsite::dom
 
         const std::string& getContent() const;
 
-        static std::string createPageContentFromDom(const DocumentObject& dom);
+        template<typename T>
+        static std::string createPageContent(const T& obj) {
+            Document document;
+            obj.append(document);
+            return document.getContent();
+        }
     };
-} // namespace cppwebsite::dom
+} // namespace cppwebsite

@@ -1,8 +1,9 @@
 #include "Index.hh"
 
+#include <cppwebsite/common/Document.hh>
+
 #include <cppwebsite/dom/Tag.hh>
 #include <cppwebsite/dom/Text.hh>
-#include <cppwebsite/dom/Document.hh>
 #include <cppwebsite/dom/Id.hh>
 #include <cppwebsite/dom/Class.hh>
 
@@ -99,7 +100,7 @@ namespace cppwebsite::pages
     : Page("/")
     , m_styleSheetPage(std::make_unique<Css>("/css/front.css"))
     , m_dom(createDom(*m_styleSheetPage))
-    , m_content(dom::Document::createPageContentFromDom(*m_dom))
+    , m_content(Document::createPageContent(*m_dom))
     {
         m_styleSheetPage->computeContent();
         addSubpage(std::move(m_styleSheetPage));

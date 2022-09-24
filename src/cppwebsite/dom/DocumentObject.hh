@@ -4,9 +4,13 @@
 #include <memory>
 #include <vector>
 
-namespace cppwebsite::dom
+namespace cppwebsite
 {
     class Document;
+} // namespace cppwebsite
+
+namespace cppwebsite::dom
+{
 
     class DocumentObject {
     protected:

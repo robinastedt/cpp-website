@@ -5,6 +5,7 @@ add_library(cpp-website-pages
 )
 
 target_link_libraries(cpp-website-pages
+    cpp-website-common
     cpp-website-dom
     cpp-website-css
 )

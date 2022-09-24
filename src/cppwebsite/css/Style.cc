@@ -1,6 +1,6 @@
 #include "Style.hh"
 
-#include <cppwebsite/dom/Document.hh>
+#include <cppwebsite/common/Document.hh>
 
 #include <string>
 
@@ -40,7 +40,7 @@ namespace cppwebsite::css
     {}
 
     void
-    Style::append(dom::Document& document) const {
+    Style::append(Document& document) const {
         std::string selector;
         if (!m_type.empty()) {
             selector.append(m_type).append(" ");
@@ -56,7 +56,7 @@ namespace cppwebsite::css
         }
         document.append(selector).append("{\n");
         {
-            dom::Document::IndentScope indentScope{document.indent()};
+            Document::IndentScope indentScope{document.indent()};
             for (const Property& property : m_properties) {
                 document.append(property.key)
                         .append(": ")
