@@ -1,22 +1,22 @@
 #pragma once
 
 #include <cppwebsite/pages/Page.hh>
-#include <cppwebsite/pages/Css.hh>
 #include <cppwebsite/css/StyleSheet.hh>
-#include <cppwebsite/dom/DocumentObject.hh>
 
 namespace cppwebsite::pages
 {
-    class Index : public Page {
-        std::unique_ptr<Css> m_styleSheetPage;  // temporary during initialization
-        dom::DocumentObject::ptr m_dom;
+    class Css : public Page {
+        css::StyleSheet m_styleSheet;
         std::string m_content;
 
     public:
-        Index();
+        Css(std::string path);
 
-        ~Index() override;
+        ~Css() override;
 
         void handleRequest(const httplib::Request& request, httplib::Response& response) const override;
+
+        void computeContent();
+        css::StyleSheet& getStyleSheet();
     };
 } // namespace cppwebsite::pages

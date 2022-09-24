@@ -10,9 +10,10 @@ namespace cppwebsite::dom
         size_t m_indentation;
         std::string m_content;
 
-        Document();
 
     public:
+        Document();
+
         class IndentScope {
             friend class Document;
             Document& m_document;
@@ -25,7 +26,8 @@ namespace cppwebsite::dom
         IndentScope indent();
         Document& append(std::string_view str);
 
+        const std::string& getContent() const;
+
         static std::string createPageContentFromDom(const DocumentObject& dom);
-        
     };
 } // namespace cppwebsite::dom

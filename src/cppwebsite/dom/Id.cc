@@ -1,19 +1,23 @@
 #include "Id.hh"
 
-#include <cppwebsite/dom/Property.hh>
-#include <map>
-#include <stdexcept>
-
 namespace cppwebsite::dom
 {
-    Id::Id(std::string name)
-    : UniqueBase<Id>(std::move(name))
+    Id::Id(New)
+    : UniqueBase<Id>(New{})
     {}
 
-    const std::string&
-    Id::getPropertyName() const {
-        static std::string name = "id";
-        return name;
+    Id::Id(Anonymous)
+    : UniqueBase<Id>(Anonymous{})
+    {}
+
+    std::string_view
+    Id::getPropertyName() {
+        return "id";
+    }
+
+    std::string
+    Id::getStringRepresentation(size_t index) {
+        return "#id" + std::to_string(index);
     }
 
 } // namespace cppwebsite::dom

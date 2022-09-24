@@ -4,34 +4,83 @@
 #include <cppwebsite/dom/Text.hh>
 #include <cppwebsite/dom/Document.hh>
 #include <cppwebsite/dom/Id.hh>
+#include <cppwebsite/dom/Class.hh>
+
+#include <cassert>
 
 namespace cppwebsite::dom
 {
-    Tag::Tag(std::string name, Properties properties, DocumentObjects children, ChildPolicy childPolicy)
-    : m_name(std::move(name))
-    , m_properties(std::move(properties))
+    Tag::Tag(std::string type, DocumentObjects children, ChildPolicy childPolicy)
+    : m_type(std::move(type))
+    , m_id(Id::createNew())
+    , m_class(Class::anonymous())
+    , m_properties()
     , m_children(std::move(children))
     , m_childPolicy(childPolicy)
     {}
 
     Tag::~Tag() = default;
 
+    const std::string&
+    Tag::getType() const {
+        return m_type;
+    }
+
+    Id
+    Tag::getId() const {
+        return m_id;
+    }
+
+    Class
+    Tag::getClass() const {
+        return m_class;
+    }
+
     void
-    Tag::append(Document& document) const {
-        document.append("<").append(m_name);
-        for (const Property& property : m_properties) {
+    Tag::setClass(Class clazz) {
+        m_class = clazz;
+    }
+
+    void
+    Tag::addProperty(Property property) {
+        assert(property.key != "id");    // These have special handling
+        assert(property.key != "class");
+        m_properties.emplace_back(std::move(property));
+    }
+
+    void
+    Tag::addProperty(std::string key, std::string value) {
+        addProperty(Property{std::move(key), std::move(value)});
+    }
+
+    namespace
+    {
+        void appendProperty(Document& document, const Property& property) {
             document.append(" ")
                     .append(property.key)
                     .append("=\"")
                     .append(escapeForHtml(property.value))
                     .append("\"");
         }
+    } // namespace
+    
+
+    void
+    Tag::append(Document& document) const {
+        document.append("<").append(m_type);
+        appendProperty(document, m_id.getProperty());
+        if (!m_class.isAnonymous()) {
+            appendProperty(document, m_class.getProperty());
+        }
+        for (const Property& property : m_properties) {
+            appendProperty(document, property);
+        }
         document.append(">");
 
         if (m_childPolicy == ChildPolicy::NewLine) {
             document.append("\n");
         }
-        for (const ptr& child : m_children) {
+        for (const DocumentObject::ptr& child : m_children) {
             Document::IndentScope indent = document.indent();
             child->append(document);
             if (m_childPolicy == ChildPolicy::NewLine) {
@@ -39,11 +88,11 @@ namespace cppwebsite::dom
             }
         }
 
-        document.append("</").append(m_name).append(">");
+        document.append("</").append(m_type).append(">");
     }
 
     void
-    Tag::addChild(std::unique_ptr<DocumentObject> child) {
+    Tag::addChild(DocumentObject::ptr child) {
         m_children.emplace_back(std::move(child));
     }
 
@@ -52,7 +101,7 @@ namespace cppwebsite::dom
         if (m_children.empty()) {
             m_children = std::move(children);
         } else {
-            for (ptr& child : children) {
+            for (DocumentObject::ptr& child : children) {
                 m_children.emplace_back(std::move(child));
             }
         }
@@ -60,61 +109,48 @@ namespace cppwebsite::dom
 
     Tag::ptr
     Tag::createHtml(DocumentObjects children) {
-        return std::make_unique<Tag>("html", Properties{}, std::move(children), ChildPolicy::NewLine);
+        return std::make_unique<Tag>("html", std::move(children), ChildPolicy::NewLine);
     }
 
     Tag::ptr
     Tag::createHeader(DocumentObjects children) {
-        return std::make_unique<Tag>("header", Properties{}, std::move(children), ChildPolicy::NewLine);
+        return std::make_unique<Tag>("header",  std::move(children), ChildPolicy::NewLine);
     }
 
     Tag::ptr
     Tag::createTitle(std::string content) {
         DocumentObjects children;
         children.emplace_back(std::make_unique<Text>(std::move(content)));
-        return std::make_unique<Tag>("title", Properties{}, std::move(children), ChildPolicy::Inline);
+        return std::make_unique<Tag>("title", std::move(children), ChildPolicy::Inline);
     }
 
     Tag::ptr
     Tag::createMeta(std::string name, std::string content) {
-        Properties properties {
-            {"name", std::move(name)},
-            {"content", std::move(content)}
-        };
-        return std::make_unique<Tag>("meta", std::move(properties));
+        auto meta = std::make_unique<Tag>("meta");
+        meta->addProperty("name", std::move(name));
+        meta->addProperty("content", std::move(content));
+        return meta;
     }
 
     Tag::ptr
     Tag::createBody(DocumentObjects children) {
-        return std::make_unique<Tag>("body", Properties{}, std::move(children), ChildPolicy::NewLine);
+        return std::make_unique<Tag>("body", std::move(children), ChildPolicy::NewLine);
+    }
+
+    Tag::ptr
+    Tag::createDiv(DocumentObject::ptr child, ChildPolicy childPolicy) {
+        DocumentObjects children;
+        children.emplace_back(std::move(child));
+        return createDiv(std::move(children), childPolicy);
     }
 
     Tag::ptr
     Tag::createDiv(DocumentObjects children, ChildPolicy childPolicy) {
-        return createDiv(Id::anonymous(), std::move(children), childPolicy);
+        return std::make_unique<Tag>("div", std::move(children), childPolicy);
     }
 
-    Tag::ptr Tag::createDiv(Id id, ptr child, ChildPolicy childPolicy) {
-        DocumentObjects children;
-        children.emplace_back(std::move(child));
-        return createDiv(std::move(id), std::move(children), childPolicy);
-    }
-
-    Tag::ptr
-    Tag::createDiv(Id id, DocumentObjects children, ChildPolicy childPolicy) {
-        if (id.isAnonymous()) {
-            return std::make_unique<Tag>("div", Properties{}, std::move(children), childPolicy);
-        }
-        Properties properties;
-        if (!id.isAnonymous());
-        properties.emplace_back(id.getProperty());
-        return std::make_unique<Tag>("div", std::move(properties), std::move(children), childPolicy);
-    }
-
-    Tag::ptr Tag::createDiv(Id id, std::string text) {
-        DocumentObjects children;
-        children.emplace_back(std::make_unique<Text>(std::move(text)));
-        return createDiv(std::move(id), std::move(children), ChildPolicy::Inline);
+    Tag::ptr Tag::createDiv(std::string text) {
+        return createDiv(std::make_unique<Text>(std::move(text)), ChildPolicy::Inline);
     }
 
     namespace
@@ -132,11 +168,10 @@ namespace cppwebsite::dom
 
     Tag::ptr
     Tag::createLink(std::string path, DocumentObjects children, ChildPolicy childPolicy, LinkPolicy linkPolicy) {
-        Properties properties {
-            {"target", linkPolicyProperty(linkPolicy)},
-            {"href", std::move(path)}
-        };
-        return std::make_unique<Tag>("a", std::move(properties), std::move(children), childPolicy);
+        auto link = std::make_unique<Tag>("a", std::move(children), childPolicy);
+        link->addProperty("target", linkPolicyProperty(linkPolicy));
+        link->addProperty("href", std::move(path));
+        return link;
     }
 
     Tag::ptr

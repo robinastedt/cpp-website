@@ -1,20 +1,25 @@
 #include "Class.hh"
 
-#include <cppwebsite/dom/Property.hh>
-#include <map>
-#include <stdexcept>
-
 namespace cppwebsite::dom
 {
-    Class::Class(std::string name)
-    : UniqueBase<Class>(std::move(name))
+    Class::Class(New)
+    : UniqueBase<Class>(New{})
     {}
 
-    const std::string&
-    Class::getPropertyName() const {
-        static std::string name = "class";
-        return name;
+    Class::Class(Anonymous)
+    : UniqueBase<Class>(Anonymous{})
+    {}
+
+    std::string_view
+    Class::getPropertyName() {
+        return "class";
     }
+
+    std::string
+    Class::getStringRepresentation(size_t index) {
+        return ".class" + std::to_string(index);
+    }
+
 
 } // namespace cppwebsite::dom
 

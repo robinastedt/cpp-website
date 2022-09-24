@@ -41,6 +41,11 @@ namespace cppwebsite::dom
         return *this;
     }
 
+    const std::string&
+    Document::getContent() const {
+        return m_content;
+    }
+
     std::string
     Document::createPageContentFromDom(const DocumentObject& dom) {
         Document document;

@@ -1,8 +1,7 @@
 #include "UniqueBase.hh"
 
-#include <cppwebsite/dom/Property.hh>
-#include <map>
-#include <stdexcept>
+#include <cppwebsite/common/Property.hh>
+#include <vector>
 
 namespace cppwebsite::dom
 {
@@ -11,29 +10,22 @@ namespace cppwebsite::dom
         constexpr size_t _anon_index = 0;
 
         template<typename T>
-        std::map<std::string, size_t> _indices {
-            {"", _anon_index}
+        std::vector<std::string> _instances {
+            {""}  // Anonymous instance, index = 0
         };
-
-        template<typename T>
-        std::vector<std::string> _names{
-            {""}
-        };
-
-        size_t
-        getIndex(std::map<std::string, size_t>& indices, std::vector<std::string>& names, std::string name) {
-            size_t index = indices.insert({name, indices.size()}).first->second;
-            names.resize(std::max(names.size(), index + 1));
-            names[index] = std::move(name);
-            return index;
-        }
 
     } // namespace
 
-    
     template<typename T>
-    UniqueBase<T>::UniqueBase(std::string name)
-    : m_index(getIndex(_indices<T>, _names<T>, name))
+    UniqueBase<T>::UniqueBase(New)
+    : m_index(_instances<T>.size())
+    {
+        _instances<T>.emplace_back(T::getStringRepresentation(m_index));
+    }
+
+    template<typename T>
+    UniqueBase<T>::UniqueBase(Anonymous)
+    : m_index(_anon_index)
     {}
 
     template<typename T>
@@ -45,15 +37,19 @@ namespace cppwebsite::dom
     template<typename T>
     Property
     UniqueBase<T>::getProperty() const {
-        if (m_index >= _names<T>.size()) {
-            throw std::runtime_error{"Index out of bounds: index=" + std::to_string(m_index) + ", size=" + std::to_string(_names<T>.size())};
-        }
-        return Property{getPropertyName(), _names<T>[m_index]};
+        return Property{std::string{T::getPropertyName()}, _instances<T>[m_index]};
     }
 
     template<typename T>
-    T UniqueBase<T>::anonymous() {
-        return T{""};
+    T
+    UniqueBase<T>::anonymous() {
+        return T{Anonymous{}};
+    }
+
+    template<typename T>
+    T
+    UniqueBase<T>::createNew() {
+        return T{New{}};
     }
     
 } // namespace cppwebsite::dom

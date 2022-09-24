@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-namespace cppwebsite::dom
+namespace cppwebsite
 {
     struct Property {
         std::string key;
@@ -11,4 +11,4 @@ namespace cppwebsite::dom
     };
 
     using Properties = std::vector<Property>;
-} // namespace cppwebsite::dom
+} // namespace cppwebsite

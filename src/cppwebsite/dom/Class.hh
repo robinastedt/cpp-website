@@ -5,14 +5,12 @@
 
 namespace cppwebsite::dom
 {
-    struct Property;
-
     class Class : public UniqueBase<Class> {
-        size_t m_index;
+        friend class UniqueBase<Class>;
+        Class(New);
+        Class(Anonymous);
 
-    public:
-        Class(std::string name);
-
-        const std::string& getPropertyName() const override;
+        static std::string_view getPropertyName();
+        static std::string getStringRepresentation(size_t index);
     };
 } // namespace cppwebsite::dom
