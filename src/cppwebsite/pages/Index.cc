@@ -3,6 +3,7 @@
 #include <cppwebsite/dom/Tag.hh>
 #include <cppwebsite/dom/Text.hh>
 #include <cppwebsite/dom/Document.hh>
+#include <cppwebsite/dom/Id.hh>
 
 #include <httplib.h>
 
@@ -26,15 +27,18 @@ namespace cppwebsite::pages
         auto createBody() {
             // Title box
             std::vector<dom::DocumentObject::ptr> contactLinkChildren;
-            contactLinkChildren.emplace_back(dom::Tag::createDiv("title1", "Robin Åstedt"));
-            contactLinkChildren.emplace_back(dom::Tag::createDiv("title2", "Contact"));
+            dom::Id title1Id{"title1"};
+            dom::Id title2Id{"title2"};
+            contactLinkChildren.emplace_back(dom::Tag::createDiv(title1Id, "Robin Åstedt"));
+            contactLinkChildren.emplace_back(dom::Tag::createDiv(title2Id, "Contact"));
             auto contactLink = dom::Tag::createLink(
                 "mailto:robin.astedt@gmail.com",
                 std::move(contactLinkChildren),
                 dom::ChildPolicy::Inline,
                 dom::LinkPolicy::NewTab
             );
-            auto titleBox = dom::Tag::createDiv("titleBox", std::move(contactLink), dom::ChildPolicy::NewLine);
+            dom::Id titleBoxId{"titleBox"};
+            auto titleBox = dom::Tag::createDiv(titleBoxId, std::move(contactLink), dom::ChildPolicy::NewLine);
 
             // Link box
             auto musicLink = dom::Tag::createLink("music", "Music");
@@ -47,17 +51,20 @@ namespace cppwebsite::pages
             linkBoxChildren.emplace_back(std::move(projectsLink));
             linkBoxChildren.emplace_back(std::make_unique<dom::Text>(linkBoxDelimiter));
             linkBoxChildren.emplace_back(std::move(textLink));
-            auto linkBoxContent = dom::Tag::createDiv("", std::move(linkBoxChildren), dom::ChildPolicy::Inline);
-            auto linkBox = dom::Tag::createDiv("linkBox", std::move(linkBoxContent), dom::ChildPolicy::NewLine);
+            auto linkBoxContent = dom::Tag::createDiv(dom::Id::anonymous(), std::move(linkBoxChildren), dom::ChildPolicy::Inline);
+            dom::Id linkBoxId {"linkBox"};
+            auto linkBox = dom::Tag::createDiv(linkBoxId, std::move(linkBoxContent), dom::ChildPolicy::NewLine);
 
             // Main box
             std::vector<dom::DocumentObject::ptr> mainBoxChildren;
             mainBoxChildren.emplace_back(std::move(titleBox));
             mainBoxChildren.emplace_back(std::move(linkBox));
-            auto mainBox = dom::Tag::createDiv("mainBox", std::move(mainBoxChildren), dom::ChildPolicy::NewLine);
+            dom::Id mainBoxId {"mainBox"};
+            auto mainBox = dom::Tag::createDiv(mainBoxId, std::move(mainBoxChildren), dom::ChildPolicy::NewLine);
 
             // Whole page box
-            auto wholePageBox = dom::Tag::createDiv("wholepageBox", std::move(mainBox), dom::ChildPolicy::NewLine);
+            dom::Id wholePageBoxId {"wholePageId"};
+            auto wholePageBox = dom::Tag::createDiv(wholePageBoxId, std::move(mainBox), dom::ChildPolicy::NewLine);
 
             std::vector<dom::DocumentObject::ptr> children;
             children.emplace_back(std::move(wholePageBox));

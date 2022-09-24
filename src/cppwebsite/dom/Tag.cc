@@ -3,6 +3,7 @@
 #include <cppwebsite/dom/Escape.hh>
 #include <cppwebsite/dom/Text.hh>
 #include <cppwebsite/dom/Document.hh>
+#include <cppwebsite/dom/Id.hh>
 
 namespace cppwebsite::dom
 {
@@ -90,27 +91,27 @@ namespace cppwebsite::dom
 
     Tag::ptr
     Tag::createDiv(DocumentObjects children, ChildPolicy childPolicy) {
-        return createDiv("", std::move(children), childPolicy);
+        return createDiv(Id::anonymous(), std::move(children), childPolicy);
     }
 
-    Tag::ptr Tag::createDiv(std::string id, ptr child, ChildPolicy childPolicy) {
+    Tag::ptr Tag::createDiv(Id id, ptr child, ChildPolicy childPolicy) {
         DocumentObjects children;
         children.emplace_back(std::move(child));
         return createDiv(std::move(id), std::move(children), childPolicy);
     }
 
     Tag::ptr
-    Tag::createDiv(std::string id, DocumentObjects children, ChildPolicy childPolicy) {
-        if (id.empty()) {
+    Tag::createDiv(Id id, DocumentObjects children, ChildPolicy childPolicy) {
+        if (id.isAnonymous()) {
             return std::make_unique<Tag>("div", Properties{}, std::move(children), childPolicy);
         }
-        Properties properties {
-            {"id", std::move(id)}
-        };
+        Properties properties;
+        if (!id.isAnonymous());
+        properties.emplace_back(id.getProperty());
         return std::make_unique<Tag>("div", std::move(properties), std::move(children), childPolicy);
     }
 
-    Tag::ptr Tag::createDiv(std::string id, std::string text) {
+    Tag::ptr Tag::createDiv(Id id, std::string text) {
         DocumentObjects children;
         children.emplace_back(std::make_unique<Text>(std::move(text)));
         return createDiv(std::move(id), std::move(children), ChildPolicy::Inline);

@@ -1,13 +1,20 @@
 #pragma once
 
-#include <string>
+#include <string_view>
 
-namespace cppwebiste::dom
+namespace cppwebsite::dom
 {
+    struct Property;
+
     class Id {
-        std::string m_name;
+        size_t m_index;
 
     public:
         Id(std::string name);
+
+        bool isAnonymous() const;
+        Property getProperty() const;
+
+        static Id anonymous();
     };
-} // namespace cppwebiste::dom
+} // namespace cppwebsite::dom

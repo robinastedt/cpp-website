@@ -11,6 +11,8 @@
 
 namespace cppwebsite::dom
 {
+    class Id;
+
     class Tag : public DocumentObject {
         std::string m_name;
         Properties m_properties;
@@ -33,9 +35,9 @@ namespace cppwebsite::dom
         static ptr createMeta(std::string name, std::string content);
         static ptr createBody(DocumentObjects children);
         static ptr createDiv(DocumentObjects children, ChildPolicy childPolicy);
-        static ptr createDiv(std::string id, ptr child, ChildPolicy childPolicy);
-        static ptr createDiv(std::string id, DocumentObjects children, ChildPolicy childPolicy);
-        static ptr createDiv(std::string id, std::string text);
+        static ptr createDiv(Id id, ptr child, ChildPolicy childPolicy);
+        static ptr createDiv(Id id, DocumentObjects children, ChildPolicy childPolicy);
+        static ptr createDiv(Id id, std::string text);
         static ptr createLink(std::string path, DocumentObjects children, ChildPolicy childPolicy, LinkPolicy linkPolicy = LinkPolicy::Self);
         static ptr createLink(std::string path, std::string text, LinkPolicy linkPolicy = LinkPolicy::Self);
 
