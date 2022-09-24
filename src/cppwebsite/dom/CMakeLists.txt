@@ -2,8 +2,9 @@
 
 
 add_library(cpp-website-dom STATIC
-    Escape.cc
+    Document.cc
     DocumentObject.cc
+    Escape.cc
     Tag.cc
     Text.cc
 )

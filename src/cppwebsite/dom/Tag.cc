@@ -2,6 +2,7 @@
 
 #include <cppwebsite/dom/Escape.hh>
 #include <cppwebsite/dom/Text.hh>
+#include <cppwebsite/dom/Document.hh>
 
 namespace cppwebsite::dom
 {
@@ -15,7 +16,7 @@ namespace cppwebsite::dom
     Tag::~Tag() = default;
 
     void
-    Tag::append(std::string& document) const {
+    Tag::append(Document& document) const {
         document.append("<").append(m_name);
         for (const Property& property : m_properties) {
             document.append(" ")
@@ -30,6 +31,7 @@ namespace cppwebsite::dom
             document.append("\n");
         }
         for (const ptr& child : m_children) {
+            Document::IndentScope indent = document.indent();
             child->append(document);
             if (m_childPolicy == ChildPolicy::NewLine) {
                 document.append("\n");
@@ -86,6 +88,11 @@ namespace cppwebsite::dom
         return std::make_unique<Tag>("body", Properties{}, std::move(children), ChildPolicy::NewLine);
     }
 
+    Tag::ptr
+    Tag::createDiv(DocumentObjects children, ChildPolicy childPolicy) {
+        return createDiv("", std::move(children), childPolicy);
+    }
+
     Tag::ptr Tag::createDiv(std::string id, ptr child, ChildPolicy childPolicy) {
         DocumentObjects children;
         children.emplace_back(std::move(child));
@@ -94,6 +101,9 @@ namespace cppwebsite::dom
 
     Tag::ptr
     Tag::createDiv(std::string id, DocumentObjects children, ChildPolicy childPolicy) {
+        if (id.empty()) {
+            return std::make_unique<Tag>("div", Properties{}, std::move(children), childPolicy);
+        }
         Properties properties {
             {"id", std::move(id)}
         };

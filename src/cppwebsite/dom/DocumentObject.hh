@@ -6,6 +6,8 @@
 
 namespace cppwebsite::dom
 {
+    class Document;
+
     class DocumentObject {
     protected:
         DocumentObject();
@@ -15,7 +17,7 @@ namespace cppwebsite::dom
 
         virtual ~DocumentObject();
 
-        virtual void append(std::string& document) const = 0;
+        virtual void append(Document& document) const = 0;
     };
 
     using DocumentObjects = std::vector<DocumentObject::ptr>;

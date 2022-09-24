@@ -5,7 +5,7 @@
 namespace cppwebsite::pages
 {
     class Index : public Page {
-        std::string m_document;
+        std::string m_content;
 
     public:
         Index();

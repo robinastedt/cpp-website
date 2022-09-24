@@ -22,7 +22,7 @@ namespace cppwebsite::dom
     
         ~Tag() override;
 
-        void append(std::string& document) const override;
+        void append(Document& document) const override;
 
         void addChild(ptr child);
         void addChildren(DocumentObjects children);
@@ -32,6 +32,7 @@ namespace cppwebsite::dom
         static ptr createTitle(std::string content);
         static ptr createMeta(std::string name, std::string content);
         static ptr createBody(DocumentObjects children);
+        static ptr createDiv(DocumentObjects children, ChildPolicy childPolicy);
         static ptr createDiv(std::string id, ptr child, ChildPolicy childPolicy);
         static ptr createDiv(std::string id, DocumentObjects children, ChildPolicy childPolicy);
         static ptr createDiv(std::string id, std::string text);

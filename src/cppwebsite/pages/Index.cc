@@ -2,6 +2,7 @@
 
 #include <cppwebsite/dom/Tag.hh>
 #include <cppwebsite/dom/Text.hh>
+#include <cppwebsite/dom/Document.hh>
 
 #include <httplib.h>
 
@@ -46,7 +47,8 @@ namespace cppwebsite::pages
             linkBoxChildren.emplace_back(std::move(projectsLink));
             linkBoxChildren.emplace_back(std::make_unique<dom::Text>(linkBoxDelimiter));
             linkBoxChildren.emplace_back(std::move(textLink));
-            auto linkBox = dom::Tag::createDiv("linkBox", std::move(linkBoxChildren), dom::ChildPolicy::Inline);
+            auto linkBoxContent = dom::Tag::createDiv("", std::move(linkBoxChildren), dom::ChildPolicy::Inline);
+            auto linkBox = dom::Tag::createDiv("linkBox", std::move(linkBoxContent), dom::ChildPolicy::NewLine);
 
             // Main box
             std::vector<dom::DocumentObject::ptr> mainBoxChildren;
@@ -69,24 +71,18 @@ namespace cppwebsite::pages
             return dom::Tag::createHtml(std::move(children));
         }
 
-        std::string
-        createDocument() {
-            std::string document;
-            createHtml()->append(document);
-            return document;
-        }
     } // namespace
     
 
     Index::Index()
     : Page("/")
-    , m_document(createDocument())
+    , m_content(dom::Document::createPageContentFromDom(*createHtml()))
     {}
 
     Index::~Index() = default;
 
     void
     Index::handleRequest(const httplib::Request& request, httplib::Response& response) const {
-        response.set_content(m_document, _htmlContentType);
+        response.set_content(m_content, _htmlContentType);
     }
 } // namespace cppwebsite::pages

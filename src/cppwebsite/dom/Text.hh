@@ -12,6 +12,6 @@ namespace cppwebsite::dom
     
         ~Text() override;
 
-        void append(std::string& document) const override;
+        void append(Document& document) const override;
     };
 } // namespace cppwebsite::dom
