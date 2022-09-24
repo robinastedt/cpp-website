@@ -71,7 +71,7 @@ namespace cppwebsite::dom
     Tag::ptr
     Tag::createTitle(std::string content) {
         DocumentObjects children;
-        children.emplace_back(std::make_unique<Text>("title"));
+        children.emplace_back(std::make_unique<Text>(std::move(content)));
         return std::make_unique<Tag>("title", Properties{}, std::move(children), ChildPolicy::Inline);
     }
 
