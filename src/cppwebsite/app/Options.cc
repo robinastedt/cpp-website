@@ -19,7 +19,7 @@ namespace cppwebsite::app
             po::store(po::parse_command_line(argc, argv, desc), vm);
             po::notify(vm);
             if (help) {
-                std::cout << desc << std::endl;
+                desc.print(std::cout);
                 m_exitCode = 0;
             }
         } catch (const std::exception& ex) {
