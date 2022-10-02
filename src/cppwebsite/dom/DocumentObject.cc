@@ -1,7 +1,5 @@
 #include "DocumentObject.hh"
 
-
-
 namespace cppwebsite::dom
 {
     DocumentObject::DocumentObject() = default;
