@@ -134,6 +134,13 @@ namespace cppwebsite::dom
     }
 
     Tag::ptr
+    Tag::createBody(DocumentObject::ptr child) {
+        DocumentObjects children;
+        children.emplace_back(std::move(child));
+        return createBody(std::move(children));
+    }
+
+    Tag::ptr
     Tag::createBody(DocumentObjects children) {
         return std::make_unique<Tag>("body", std::move(children), ChildPolicy::NewLine);
     }

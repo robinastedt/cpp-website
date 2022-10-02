@@ -48,6 +48,7 @@ namespace cppwebsite::dom
         static ptr createHeader(DocumentObjects children);
         static ptr createTitle(std::string content);
         static ptr createMeta(std::string name, std::string content);
+        static ptr createBody(DocumentObject::ptr child);
         static ptr createBody(DocumentObjects children);
         static ptr createDiv(DocumentObject::ptr child, ChildPolicy childPolicy);
         static ptr createDiv(DocumentObjects children, ChildPolicy childPolicy);

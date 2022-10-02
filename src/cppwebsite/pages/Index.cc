@@ -35,48 +35,43 @@ namespace cppwebsite::pages
             return header;
         }
 
-        auto createBody(Css& styleSheetPage) {
-            css::StyleSheet& styleSheet = styleSheetPage.getStyleSheet();
 
-            // General styles
-            Properties bodyStyle {
-                {"background-color", "#000000"},
-                {"color", "#972322"},
-                {"text-shadow", "3px 3px 3px #000000"}
-            };
+        // General styles
+        Properties bodyStyle {
+            {"background-color", "#000000"},
+            {"color", "#972322"},
+            {"text-shadow", "3px 3px 3px #000000"}
+        };
 
-            Properties linkUnvisitedStyle {
-                {"color", "#972322"},
-                {"text-description", "none"}
-            };
+        Properties linkUnvisitedStyle {
+            {"color", "#972322"},
+            {"text-description", "none"}
+        };
 
-            Properties linkVisitedStyle {
-                {"color", "#972322"},
-                {"text-description", "none"}
-            };
+        Properties linkVisitedStyle {
+            {"color", "#972322"},
+            {"text-description", "none"}
+        };
 
-            Properties linkHoverStyle {
-                {"color", "#904848"},
-                {"text-description", "none"}
-            };
+        Properties linkHoverStyle {
+            {"color", "#904848"},
+            {"text-description", "none"}
+        };
 
-            Properties linkActiveStyle {
-                {"color", "#900000"},
-                {"text-description", "none"}
-            };
+        Properties linkActiveStyle {
+            {"color", "#900000"},
+            {"text-description", "none"}
+        };
 
-            auto genericLink = dom::Tag::createLink("", "");
-            css::Selector linkSelector = css::Selector{}.matchTag(*genericLink);
-            css::Selector linkUnvisitedSelector = css::Selector{}.matchTag(*genericLink, css::TagState::LinkUnvisited);
-            css::Selector linkVisitedSelector = css::Selector{}.matchTag(*genericLink, css::TagState::LinkVisisted);
-            css::Selector linkHoverSelector = css::Selector{}.matchTag(*genericLink, css::TagState::ActionHover);
-            css::Selector linkActiveSelector = css::Selector{}.matchTag(*genericLink, css::TagState::ActionActive);
-            styleSheet.add(linkUnvisitedSelector, linkUnvisitedStyle);
-            styleSheet.add(linkVisitedSelector, linkVisitedStyle);
-            styleSheet.add(linkHoverSelector, linkHoverStyle);
-            styleSheet.add(linkActiveSelector, linkActiveStyle);
+        auto genericLink = dom::Tag::createLink("", "");
+        css::Selector linkSelector = css::Selector{}.matchTag(*genericLink);
+        css::Selector linkUnvisitedSelector = css::Selector{}.matchTag(*genericLink, css::TagState::LinkUnvisited);
+        css::Selector linkVisitedSelector = css::Selector{}.matchTag(*genericLink, css::TagState::LinkVisisted);
+        css::Selector linkHoverSelector = css::Selector{}.matchTag(*genericLink, css::TagState::ActionHover);
+        css::Selector linkActiveSelector = css::Selector{}.matchTag(*genericLink, css::TagState::ActionActive);
 
-            // Title box
+
+        auto createTitleBox(css::StyleSheet& styleSheet) {
             std::vector<dom::DocumentObject::ptr> contactLinkChildren;
             auto contactLinkContent1 = dom::Tag::createDiv("Robin Åstedt");
             contactLinkContent1->setClass(dom::Class::createNew());
@@ -112,9 +107,10 @@ namespace cppwebsite::pages
                 dom::LinkPolicy::NewTab
             );
 
-            auto titleBox = dom::Tag::createDiv(std::move(contactLink), dom::ChildPolicy::NewLine);
+            return dom::Tag::createDiv(std::move(contactLink), dom::ChildPolicy::NewLine);
+        }
 
-            // Link box
+        auto createLinkBox(css::StyleSheet& styleSheet) {
             auto musicLink = dom::Tag::createLink("music", "Music");
             auto projectsLink = dom::Tag::createLink("projects", "Projects");
             auto textLink = dom::Tag::createLink("text", "Text");
@@ -126,30 +122,39 @@ namespace cppwebsite::pages
             linkBoxChildren.emplace_back(std::make_unique<dom::Text>(linkBoxDelimiter));
             linkBoxChildren.emplace_back(std::move(textLink));
             auto linkBoxContent = dom::Tag::createDiv(std::move(linkBoxChildren), dom::ChildPolicy::Inline);
-            auto linkBox = dom::Tag::createDiv(std::move(linkBoxContent), dom::ChildPolicy::NewLine);
+            return dom::Tag::createDiv(std::move(linkBoxContent), dom::ChildPolicy::NewLine);
+        }
 
-            // Main box
-            std::vector<dom::DocumentObject::ptr> mainBoxChildren;
-            mainBoxChildren.emplace_back(std::move(titleBox));
-            mainBoxChildren.emplace_back(std::move(linkBox));
-            auto mainBox = dom::Tag::createDiv(std::move(mainBoxChildren), dom::ChildPolicy::NewLine);
+
+        auto createBody(css::StyleSheet& styleSheet) {
+ 
+            // Centered content
+            std::vector<dom::DocumentObject::ptr> content;
+            content.emplace_back(createTitleBox(styleSheet));
+            content.emplace_back(createLinkBox(styleSheet));
+            auto contentBox = dom::Tag::createDiv(std::move(content), dom::ChildPolicy::NewLine);
 
             // Whole page box
-            auto wholePageBox = dom::Tag::createDiv(std::move(mainBox), dom::ChildPolicy::NewLine);
+            auto wholePageBox = dom::Tag::createDiv(std::move(contentBox), dom::ChildPolicy::NewLine);
 
-            std::vector<dom::DocumentObject::ptr> children;
-            children.emplace_back(std::move(wholePageBox));
-            auto body = dom::Tag::createBody(std::move(children));
-            styleSheet.add(css::Selector{}.matchTag(*body), std::move(bodyStyle));
-
-            return body;
+            return dom::Tag::createBody(std::move(wholePageBox));
         }
 
         auto
         createDom(Css& styleSheetPage) {
+            css::StyleSheet& styleSheet = styleSheetPage.getStyleSheet();
             std::vector<dom::DocumentObject::ptr> children;
-            children.emplace_back(createHeader(styleSheetPage));
-            children.emplace_back(createBody(styleSheetPage));
+            auto header = createHeader(styleSheetPage);
+            auto body = createBody(styleSheet);
+
+            styleSheet.add(linkUnvisitedSelector, linkUnvisitedStyle);
+            styleSheet.add(linkVisitedSelector, linkVisitedStyle);
+            styleSheet.add(linkHoverSelector, linkHoverStyle);
+            styleSheet.add(linkActiveSelector, linkActiveStyle);
+            styleSheet.add(css::Selector{}.matchTag(*body), std::move(bodyStyle));
+
+            children.emplace_back(std::move(header));
+            children.emplace_back(std::move(body));
             return dom::Tag::createHtml(std::move(children));
         }
     } // namespace
