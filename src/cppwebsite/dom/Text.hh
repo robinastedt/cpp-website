@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cppwebsite/dom/DocumentObject.hh>
-#include <cppwebsite/common/Escape.hh>
+#include <cppwebsite/common/EscapePolicy.hh>
 
 namespace cppwebsite::dom
 {

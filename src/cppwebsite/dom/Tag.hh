@@ -5,12 +5,15 @@
 #include <cppwebsite/dom/LinkPolicy.hh>
 #include <cppwebsite/dom/Id.hh>
 #include <cppwebsite/dom/Class.hh>
-
 #include <cppwebsite/common/Property.hh>
 
 #include <string>
-#include <vector>
 #include <memory>
+
+namespace cppwebsite
+{
+    struct Property;
+} // namespace cppwebsite
 
 namespace cppwebsite::dom
 {

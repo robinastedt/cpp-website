@@ -1,7 +1,6 @@
 #include "Css.hh"
 
 #include <cppwebsite/common/Document.hh>
-#include <cppwebsite/css/StyleSheet.hh>
 
 #include <httplib.h>
 

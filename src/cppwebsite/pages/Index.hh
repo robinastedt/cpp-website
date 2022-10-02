@@ -2,7 +2,6 @@
 
 #include <cppwebsite/pages/Page.hh>
 #include <cppwebsite/pages/Css.hh>
-#include <cppwebsite/css/StyleSheet.hh>
 #include <cppwebsite/dom/DocumentObject.hh>
 
 namespace cppwebsite::pages
