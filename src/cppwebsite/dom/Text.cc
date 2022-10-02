@@ -1,13 +1,11 @@
 #include "Text.hh"
 
-#include <cppwebsite/dom/Escape.hh>
-
 #include <cppwebsite/common/Document.hh>
 
 namespace cppwebsite::dom
 {
-    Text::Text(std::string content)
-    : m_content(escapeForHtml(content)) {}
+    Text::Text(std::string content, EscapePolicy escapePolicy)
+    : m_content(escapeForHtml(content, escapePolicy)) {}
 
     Text::~Text() = default;
 
@@ -15,4 +13,15 @@ namespace cppwebsite::dom
     Text::append(Document& document) const {
         document.append(m_content);
     }
+
+    Text::ptr
+    Text::create(std::string content) {
+        return std::make_unique<Text>(std::move(content), EscapePolicy::Default);
+    }
+
+    Text::ptr
+    Text::createRaw(std::string content) {
+        return std::make_unique<Text>(std::move(content), EscapePolicy::EscapeWhitespace);
+    }
+
 } // namespace cppwebsite::dom

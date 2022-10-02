@@ -1,10 +1,10 @@
 #include "Tag.hh"
 
-#include <cppwebsite/dom/Escape.hh>
 #include <cppwebsite/dom/Text.hh>
 #include <cppwebsite/dom/Id.hh>
 #include <cppwebsite/dom/Class.hh>
 
+#include <cppwebsite/common/Escape.hh>
 #include <cppwebsite/common/Document.hh>
 
 #include <cassert>

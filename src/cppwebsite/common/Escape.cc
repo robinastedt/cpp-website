@@ -3,7 +3,7 @@
 #include <codecvt>
 #include <locale>
 
-namespace cppwebsite::dom
+namespace cppwebsite
 {
     namespace
     {
@@ -20,13 +20,21 @@ namespace cppwebsite::dom
         }
 
         bool
-        isSafeForHtml(char32_t code) {
+        isSafeForHtml(char32_t code, EscapePolicy escapePolicy) {
             switch (code) {
+                case '\t':
+                case '\n':
+                case ' ':
+                    if (escapePolicy == EscapePolicy::EscapeWhitespace) {
+                        return false;
+                    }
+                    break;
                 case '"':
                 case '&':
                 case '\'':
                 case '<':
-                case '>': return false;
+                case '>':
+                    return false;
             }
             return code >= ' ' && code <= '~';
         }
@@ -34,7 +42,7 @@ namespace cppwebsite::dom
     } // namespace
 
     std::string
-    escapeForHtml(std::string_view str) {
+    escapeForHtml(std::string_view str, EscapePolicy escapePolicy) {
         std::u32string str32{toUtf32(str)};
 
         using UniIter = std::u32string::iterator;
@@ -45,7 +53,7 @@ namespace cppwebsite::dom
 
         for (UniIter it = begin; it != end; ++it) {
             const char32_t code = *it;
-            if (isSafeForHtml(code)) {
+            if (isSafeForHtml(code, escapePolicy)) {
                 continue;
             }
             std::u32string_view previous(begin, it);
@@ -61,5 +69,5 @@ namespace cppwebsite::dom
         return escaped;
     }
 
-} // namespace cppwebsite::dom
+} // namespace cppwebsite
 

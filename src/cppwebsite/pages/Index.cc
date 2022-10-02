@@ -117,9 +117,9 @@ namespace cppwebsite::pages
             std::string linkBoxDelimiter = " | ";
             std::vector<dom::DocumentObject::ptr> linkBoxChildren;
             linkBoxChildren.emplace_back(std::move(musicLink));
-            linkBoxChildren.emplace_back(std::make_unique<dom::Text>(linkBoxDelimiter));
+            linkBoxChildren.emplace_back(std::make_unique<dom::Text>(linkBoxDelimiter, EscapePolicy::EscapeWhitespace));
             linkBoxChildren.emplace_back(std::move(projectsLink));
-            linkBoxChildren.emplace_back(std::make_unique<dom::Text>(linkBoxDelimiter));
+            linkBoxChildren.emplace_back(std::make_unique<dom::Text>(linkBoxDelimiter, EscapePolicy::EscapeWhitespace));
             linkBoxChildren.emplace_back(std::move(textLink));
             auto linkBoxContent = dom::Tag::createDiv(std::move(linkBoxChildren), dom::ChildPolicy::Inline);
             return dom::Tag::createDiv(std::move(linkBoxContent), dom::ChildPolicy::NewLine);
