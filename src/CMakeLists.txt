@@ -7,11 +7,12 @@ project(cppwebsite
 
 set(CMAKE_CXX_STANDARD 20)
 
+find_package(httplib REQUIRED)
+find_package(Boost REQUIRED COMPONENTS program_options)
+
 include_directories(
     ${CMAKE_SOURCE_DIR}
 )
-
-find_package(httplib REQUIRED)
 
 include(cmake/targets.cmake)
 

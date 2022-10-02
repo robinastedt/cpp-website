@@ -1,6 +1,7 @@
+add_subdirectory(app)
 add_subdirectory(common)
-add_subdirectory(dom)
 add_subdirectory(css)
+add_subdirectory(dom)
 add_subdirectory(pages)
 
 add_namespaced_executable(
@@ -8,7 +9,5 @@ add_namespaced_executable(
     SOURCES
         main.cc
     DEPENDS_INTERNAL
-        pages
-    DEPENDS
-        httplib::httplib
+        app
 )

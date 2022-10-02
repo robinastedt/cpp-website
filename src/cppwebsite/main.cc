@@ -1,23 +1,13 @@
-#include <httplib.h>
 
-#include <cppwebsite/pages/Index.hh>
+#include <cppwebsite/app/App.hh>
+#include <cppwebsite/app/Options.hh>
 
-namespace cppwebsite
-{
-    int main() {
-        httplib::Server server;
-
-        pages::Index index;
-        index.registerServer(server);
-
-        server.listen("localhost", 8080);
-
-        return EXIT_SUCCESS;
+int main(int argc, char** argv) {
+    cppwebsite::app::Options options{argc, argv};
+    if (options.getExitCode().has_value()) {
+        return *options.getExitCode();
     }
-} // namespace cppwebsite
-
-
-
-int main() {
-    return cppwebsite::main();
+    cppwebsite::app::App app{std::move(options)};
+    app.start();
+    return EXIT_SUCCESS;
 }
