@@ -1,12 +1,7 @@
 #pragma once
 
 #include <cppwebsite/common/Property.hh>
-#include <cppwebsite/dom/Tag.hh>
-#include <cppwebsite/dom/Id.hh>
-#include <cppwebsite/dom/Class.hh>
-#include <cppwebsite/css/TagState.hh>
-
-#include <string>
+#include <cppwebsite/css/Selector.hh>
 
 namespace cppwebsite
 {
@@ -17,15 +12,11 @@ namespace cppwebsite
 namespace cppwebsite::css
 {
     class Style {
-        friend class StyleSheet;
-
+        Selector m_selector;
         Properties m_properties;
-        std::string m_type;
-        dom::Id m_id;
-        dom::Class m_class;
 
     public:
-        Style(Properties properties, const dom::Tag* tag, TagState state, dom::Id id, dom::Class clazz);
+        Style(Selector selector, Properties properties);
 
         void append(Document& document) const;
     };

@@ -17,9 +17,8 @@ namespace cppwebsite::dom
 
     std::string
     Class::getStringRepresentation(size_t index) {
-        return ".class" + std::to_string(index);
+        return "class" + std::to_string(index);
     }
-
 
 } // namespace cppwebsite::dom
 

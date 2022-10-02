@@ -15,6 +15,8 @@ namespace cppwebsite
             friend class Document;
             Document& m_document;
             IndentScope(Document& document);
+            IndentScope(const IndentScope&) = delete;
+            IndentScope& operator=(const IndentScope&) = delete;
 
         public:
             ~IndentScope();

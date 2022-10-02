@@ -36,16 +36,82 @@ namespace cppwebsite::pages
         }
 
         auto createBody(Css& styleSheetPage) {
+            css::StyleSheet& styleSheet = styleSheetPage.getStyleSheet();
+
+            // General styles
+            Properties bodyStyle {
+                {"background-color", "#000000"},
+                {"color", "#972322"},
+                {"text-shadow", "3px 3px 3px #000000"}
+            };
+
+            Properties linkUnvisitedStyle {
+                {"color", "#972322"},
+                {"text-description", "none"}
+            };
+
+            Properties linkVisitedStyle {
+                {"color", "#972322"},
+                {"text-description", "none"}
+            };
+
+            Properties linkHoverStyle {
+                {"color", "#904848"},
+                {"text-description", "none"}
+            };
+
+            Properties linkActiveStyle {
+                {"color", "#900000"},
+                {"text-description", "none"}
+            };
+
+            auto genericLink = dom::Tag::createLink("", "");
+            css::Selector linkSelector = css::Selector{}.matchTag(*genericLink);
+            css::Selector linkUnvisitedSelector = css::Selector{}.matchTag(*genericLink, css::TagState::LinkUnvisited);
+            css::Selector linkVisitedSelector = css::Selector{}.matchTag(*genericLink, css::TagState::LinkVisisted);
+            css::Selector linkHoverSelector = css::Selector{}.matchTag(*genericLink, css::TagState::ActionHover);
+            css::Selector linkActiveSelector = css::Selector{}.matchTag(*genericLink, css::TagState::ActionActive);
+            styleSheet.add(linkUnvisitedSelector, linkUnvisitedStyle);
+            styleSheet.add(linkVisitedSelector, linkVisitedStyle);
+            styleSheet.add(linkHoverSelector, linkHoverStyle);
+            styleSheet.add(linkActiveSelector, linkActiveStyle);
+
             // Title box
             std::vector<dom::DocumentObject::ptr> contactLinkChildren;
-            contactLinkChildren.emplace_back(dom::Tag::createDiv("Robin Åstedt"));
-            contactLinkChildren.emplace_back(dom::Tag::createDiv("Contact"));
+            auto contactLinkContent1 = dom::Tag::createDiv("Robin Åstedt");
+            contactLinkContent1->setClass(dom::Class::createNew());
+            auto contactLinkContent2 = dom::Tag::createDiv("Contact");
+            contactLinkContent2->setClass(dom::Class::createNew());
+
+            Properties contactLink1DefaultStyle {
+                {"display", "inline"}
+            };
+            Properties contactLink2DefaultStyle {
+                {"display", "none"}
+            };
+            Properties contactLink1HoverStyle {
+                {"display", "none"}
+            };
+            Properties contactLink2HoverStyle {
+                {"display", "inline"},
+                {"padding-left", "200px"},
+                {"padding-right", "200px"}
+            };
+
+            styleSheet.add(linkSelector.matchClass(*contactLinkContent1), std::move(contactLink1DefaultStyle));
+            styleSheet.add(linkSelector.matchClass(*contactLinkContent2) ,std::move(contactLink2DefaultStyle));
+            styleSheet.add(linkHoverSelector.matchClass(*contactLinkContent1), std::move(contactLink1HoverStyle));
+            styleSheet.add(linkHoverSelector.matchClass(*contactLinkContent2), std::move(contactLink2HoverStyle));
+
+            contactLinkChildren.emplace_back(std::move(contactLinkContent1));
+            contactLinkChildren.emplace_back(std::move(contactLinkContent2));
             auto contactLink = dom::Tag::createLink(
                 "mailto:robin.astedt@gmail.com",
                 std::move(contactLinkChildren),
                 dom::ChildPolicy::Inline,
                 dom::LinkPolicy::NewTab
             );
+
             auto titleBox = dom::Tag::createDiv(std::move(contactLink), dom::ChildPolicy::NewLine);
 
             // Link box
@@ -74,14 +140,7 @@ namespace cppwebsite::pages
             std::vector<dom::DocumentObject::ptr> children;
             children.emplace_back(std::move(wholePageBox));
             auto body = dom::Tag::createBody(std::move(children));
-
-            Properties bodyStyle {
-                {"background-color", "#000000"},
-                {"color", "#972322"},
-                {"text-shadow", "3px 3px 3px #000000"}
-            };
-
-            styleSheetPage.getStyleSheet().addTagType(std::move(bodyStyle), *body);
+            styleSheet.add(css::Selector{}.matchTag(*body), std::move(bodyStyle));
 
             return body;
         }

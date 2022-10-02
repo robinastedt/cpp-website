@@ -1,4 +1,5 @@
 add_library(cpp-website-css
+    Selector.cc
     Style.cc
     StyleSheet.cc
 )

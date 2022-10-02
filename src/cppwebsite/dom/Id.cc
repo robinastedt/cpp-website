@@ -17,7 +17,7 @@ namespace cppwebsite::dom
 
     std::string
     Id::getStringRepresentation(size_t index) {
-        return "#id" + std::to_string(index);
+        return "id" + std::to_string(index);
     }
 
 } // namespace cppwebsite::dom
