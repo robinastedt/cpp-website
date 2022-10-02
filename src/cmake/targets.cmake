@@ -9,7 +9,7 @@ function(add_namespaced_library)
     add_library(${PROJECT_NAME}::${ARG_NAME} ALIAS ${PROJECT_NAME}_${ARG_NAME})
 
     list(TRANSFORM ARG_DEPENDS_INTERNAL REPLACE "(.+)" "${PROJECT_NAME}::\\1")
-    target_link_libraries(${PROJECT_NAME}_${ARG_NAME}_obj PRIVATE
+    target_link_libraries(${PROJECT_NAME}_${ARG_NAME}_obj INTERFACE
         ${ARG_DEPENDS_INTERNAL}
         ${ARG_DEPENDS}
     )
