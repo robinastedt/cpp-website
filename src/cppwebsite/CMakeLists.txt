@@ -3,13 +3,12 @@ add_subdirectory(dom)
 add_subdirectory(css)
 add_subdirectory(pages)
 
-add_executable(cpp-website
-    main.cc
-)
-
-target_link_libraries(cpp-website
-    cpp-website-common
-    cpp-website-dom
-    cpp-website-css
-    cpp-website-pages
+add_namespaced_executable(
+    NAME cppwebsite
+    SOURCES
+        main.cc
+    DEPENDS_INTERNAL
+        pages
+    DEPENDS
+        httplib::httplib
 )

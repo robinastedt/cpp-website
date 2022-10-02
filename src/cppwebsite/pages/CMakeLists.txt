@@ -1,11 +1,13 @@
-add_library(cpp-website-pages
-    Css.cc
-    Index.cc
-    Page.cc
-)
-
-target_link_libraries(cpp-website-pages
-    cpp-website-common
-    cpp-website-dom
-    cpp-website-css
+add_namespaced_library(
+    NAME pages
+    SOURCES
+        Css.cc
+        Index.cc
+        Page.cc
+    DEPENDS_INTERNAL
+        css
+        dom
+        common
+    DEPENDS
+        httplib::httplib
 )

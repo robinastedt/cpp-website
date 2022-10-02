@@ -1,11 +1,11 @@
-add_library(cpp-website-dom STATIC
-    Class.cc
-    DocumentObject.cc
-    Id.cc
-    Tag.cc
-    Text.cc
-)
-
-target_link_libraries(cpp-website-dom
-    cpp-website-common
+add_namespaced_library(
+    NAME dom
+    SOURCES
+        Class.cc
+        DocumentObject.cc
+        Id.cc
+        Tag.cc
+        Text.cc
+    DEPENDS_INTERNAL
+        common
 )
